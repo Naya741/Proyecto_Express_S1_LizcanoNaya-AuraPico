@@ -1200,221 +1200,215 @@ erDiagram
     RESENA ||--o{ COMENTARIO : genera
 ```
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Segunda Forma Normal (2FN)</title>
-</head>
-<body>
+<h2>Segunda Forma Normal (2FN)</h2>
 
+<h3>Criterios</h3>
+<p>
+  Una tabla está en <strong>2FN</strong> si:
+</p>
+<ul>
+  <li>Está en 1FN.</li>
+  <li>Todos los atributos no clave dependen completamente de la clave primaria (no hay dependencias parciales).</li>
+</ul>
 
-    <h2>Criterios</h2>
-    <ul>
-        <li>Está en 1FN.</li>
-        <li>Todos los atributos no clave (no pertenecientes a una clave primaria compuesta) dependen completamente de la clave primaria.</li>
-    </ul>
+<h3>Descripción</h3>
+<p>
+  La segunda forma normal es el segundo nivel de normalización en el diseño de bases de datos. 
+  Se aplica a tablas que ya cumplen con la primera forma normal y elimina las dependencias parciales, 
+  garantizando que cada atributo no clave dependa de toda la clave primaria.
+</p>
 
-    <h2>Descripción</h2>
-    <p>
-        La segunda forma normal, es el segundo nivel de normalización en el diseño de la base de datos
-        que se aplicará a las tablas de una base de datos que ya cumplen con la primera forma normal
-        y lleva a cabo la eliminación de dependencias parciales dentro de una tabla.
-    </p>
+<h3>Descripción Técnica</h3>
 
-    <h2>Descripción Técnica</h2>
+<h4>Usuario</h4>
+<ul>
+  <li>id_usuario (PK)</li>
+  <li>Nombre</li>
+  <li>Apellido</li>
+  <li>Email</li>
+  <li>Telefono</li>
+  <li>Contrasena</li>
+  <li>Rol</li>
+  <li>Fecha_registro</li>
+  <li>Ultimo_login</li>
+  <li>Estado</li>
+  <li>Avatar</li>
+  <li>Pais</li>
+  <li>Fecha_nacimiento</li>
+</ul>
 
-    <h3>Usuario</h3>
-    <ul>
-        <li>id_usuario (PK)</li>
-        <li>Nombre</li>
-        <li>Apellido</li>
-        <li>Email</li>
-        <li>Telefono</li>
-        <li>Contrasena</li>
-        <li>Rol</li>
-        <li>Fecha_registro</li>
-        <li>Ultimo_login</li>
-        <li>Estado</li>
-        <li>Avatar</li>
-        <li>Pais</li>
-        <li>Fecha_nacimiento</li>
-    </ul>
+<h4>Perfil</h4>
+<ul>
+  <li>id_perfil (PK)</li>
+  <li>Nombre_perfil</li>
+  <li>Avatar</li>
+  <li>Edad_configurada</li>
+  <li>Idioma_preferido</li>
+  <li>id_usuario (FK)</li>
+</ul>
 
-    <h3>Perfil</h3>
-    <ul>
-        <li>id_perfil (PK)</li>
-        <li>Nombre_perfil</li>
-        <li>Avatar</li>
-        <li>Edad_configurada</li>
-        <li>Idioma_preferido</li>
-        <li>id_usuario (FK)</li>
-    </ul>
+<h4>Categoría</h4>
+<ul>
+  <li>id_categoria (PK)</li>
+  <li>Nombre_categoria</li>
+  <li>Descripcion</li>
+  <li>Icono</li>
+  <li>Fecha_creacion</li>
+  <li>creado_por (FK → USUARIO)</li>
+</ul>
 
-    <h3>Categoría</h3>
-    <ul>
-        <li>id_categoria (PK)</li>
-        <li>Nombre_categoria</li>
-        <li>Descripcion</li>
-        <li>Icono</li>
-        <li>Fecha_creacion</li>
-        <li>creado_por (FK → USUARIO)</li>
-    </ul>
+<h4>Película</h4>
+<ul>
+  <li>id_pelicula (PK)</li>
+  <li>Titulo</li>
+  <li>Descripcion</li>
+  <li>Año</li>
+  <li>Duracion</li>
+  <li>Idioma_original</li>
+  <li>Imagen_portada</li>
+  <li>Trailer_url</li>
+  <li>Estado</li>
+  <li>Fecha_creacion</li>
+  <li>Aprobado_por (FK → USUARIO)</li>
+  <li>id_categoria (FK → CATEGORIA)</li>
+</ul>
 
-    <h3>Película</h3>
-    <ul>
-        <li>id_pelicula (PK)</li>
-        <li>Titulo</li>
-        <li>Descripcion</li>
-        <li>Año</li>
-        <li>Duracion</li>
-        <li>Idioma_original</li>
-        <li>Imagen_portada</li>
-        <li>Trailer_url</li>
-        <li>Estado</li>
-        <li>Fecha_creacion</li>
-        <li>Aprobado_por (FK → USUARIO)</li>
-        <li>id_categoria (FK → CATEGORIA)</li>
-    </ul>
+<h4>Subtitulo_pelicula</h4>
+<ul>
+  <li>id_subtitulo (PK)</li>
+  <li>Idioma</li>
+  <li>id_pelicula (FK → PELICULA)</li>
+</ul>
 
-    <h3>Subtitulo_pelicula</h3>
-    <ul>
-        <li>id_subtitulo (PK)</li>
-        <li>Idioma</li>
-        <li>id_pelicula (FK → PELICULA)</li>
-    </ul>
+<h4>Temporada</h4>
+<ul>
+  <li>id_temporada (PK)</li>
+  <li>numero_temporada</li>
+  <li>fecha_lanzamiento</li>
+  <li>descripcion</li>
+  <li>id_pelicula (FK → PELICULA)</li>
+</ul>
 
-    <h3>Temporada</h3>
-    <ul>
-        <li>id_temporada (PK)</li>
-        <li>numero_temporada</li>
-        <li>fecha_lanzamiento</li>
-        <li>descripcion</li>
-        <li>id_pelicula (FK → PELICULA)</li>
-    </ul>
+<h4>Episodio</h4>
+<ul>
+  <li>id_episodio (PK)</li>
+  <li>Titulo</li>
+  <li>Numero_episodio</li>
+  <li>Duracion</li>
+  <li>fecha_estreno</li>
+  <li>id_temporada (FK → TEMPORADA)</li>
+</ul>
 
-    <h3>Episodio</h3>
-    <ul>
-        <li>id_episodio (PK)</li>
-        <li>Titulo</li>
-        <li>Numero_episodio</li>
-        <li>Duracion</li>
-        <li>fecha_estreno</li>
-        <li>id_temporada (FK → TEMPORADA)</li>
-    </ul>
+<h4>Reseña</h4>
+<ul>
+  <li>id_resena (PK)</li>
+  <li>Titulo</li>
+  <li>Comentario</li>
+  <li>Calificacion</li>
+  <li>Spoilers</li>
+  <li>Visibilidad</li>
+  <li>Fecha_creacion</li>
+  <li>Ultima_modificacion</li>
+  <li>Editado</li>
+  <li>id_usuario (FK)</li>
+  <li>id_pelicula (FK)</li>
+</ul>
 
-    <h3>Reseña</h3>
-    <ul>
-        <li>id_resena (PK)</li>
-        <li>Titulo</li>
-        <li>Comentario</li>
-        <li>Calificacion</li>
-        <li>Spoilers</li>
-        <li>Visibilidad</li>
-        <li>Fecha_creacion</li>
-        <li>Ultima_modificacion</li>
-        <li>Editado</li>
-        <li>id_usuario (FK)</li>
-        <li>id_pelicula (FK)</li>
-    </ul>
+<h4>Interacción</h4>
+<ul>
+  <li>id_interaccion (PK)</li>
+  <li>Tipo</li>
+  <li>Fecha</li>
+  <li>Dispositivo</li>
+  <li>ip_origen</li>
+  <li>id_usuario (FK)</li>
+  <li>id_resena (FK)</li>
+</ul>
 
-    <h3>Interacción</h3>
-    <ul>
-        <li>id_interaccion (PK)</li>
-        <li>Tipo</li>
-        <li>Fecha</li>
-        <li>Dispositivo</li>
-        <li>ip_origen</li>
-        <li>id_usuario (FK)</li>
-        <li>id_resena (FK)</li>
-    </ul>
+<h4>Ranking</h4>
+<ul>
+  <li>id_ranking (PK)</li>
+  <li>Puntaje_ponderado</li>
+  <li>Posicion_global</li>
+  <li>Posicion_categoria</li>
+  <li>Total_resenas</li>
+  <li>likes_totales</li>
+  <li>dislikes_totales</li>
+  <li>fecha_actualizacion</li>
+  <li>id_pelicula (FK)</li>
+</ul>
 
-    <h3>Ranking</h3>
-    <ul>
-        <li>id_ranking (PK)</li>
-        <li>Puntaje_ponderado</li>
-        <li>Posicion_global</li>
-        <li>Posicion_categoria</li>
-        <li>Total_resenas</li>
-        <li>likes_totales</li>
-        <li>dislikes_totales</li>
-        <li>fecha_actualizacion</li>
-        <li>id_pelicula (FK)</li>
-    </ul>
+<h4>Lista_reproduccion</h4>
+<ul>
+  <li>id_lista (PK)</li>
+  <li>Nombre_lista</li>
+  <li>Descripcion</li>
+  <li>Privada</li>
+  <li>Fecha_creacion</li>
+  <li>id_usuario (FK)</li>
+</ul>
 
-    <h3>Lista_reproduccion</h3>
-    <ul>
-        <li>id_lista (PK)</li>
-        <li>Nombre_lista</li>
-        <li>Descripcion</li>
-        <li>Privada</li>
-        <li>Fecha_creacion</li>
-        <li>id_usuario (FK)</li>
-    </ul>
+<h4>Lista_contenido</h4>
+<ul>
+  <li>id_lista (FK, PK)</li>
+  <li>id_pelicula (FK, PK)</li>
+</ul>
 
-    <h3>Lista_contenido</h3>
-    <ul>
-        <li>id_lista (FK, PK)</li>
-        <li>id_pelicula (FK, PK)</li>
-    </ul>
+<h4>Historial_visualización</h4>
+<ul>
+  <li>id_historial (PK)</li>
+  <li>fecha_visualizacion</li>
+  <li>Progreso</li>
+  <li>Dispositivo</li>
+  <li>id_usuario (FK)</li>
+  <li>id_pelicula (FK)</li>
+</ul>
 
-    <h3>Historial_visualización</h3>
-    <ul>
-        <li>id_historial (PK)</li>
-        <li>fecha_visualizacion</li>
-        <li>Progreso</li>
-        <li>Dispositivo</li>
-        <li>id_usuario (FK)</li>
-        <li>id_pelicula (FK)</li>
-    </ul>
+<h4>Comentario</h4>
+<ul>
+  <li>id_comentario (PK)</li>
+  <li>texto</li>
+  <li>fecha</li>
+  <li>editado</li>
+  <li>id_usuario (FK)</li>
+  <li>id_resena (FK, opcional)</li>
+  <li>id_pelicula (FK, opcional)</li>
+</ul>
 
-    <h3>Comentario</h3>
-    <ul>
-        <li>id_comentario (PK)</li>
-        <li>texto</li>
-        <li>fecha</li>
-        <li>editado</li>
-        <li>id_usuario (FK)</li>
-        <li>id_resena (FK, opcional)</li>
-        <li>id_pelicula (FK, opcional)</li>
-    </ul>
+<h4>Notificación</h4>
+<ul>
+  <li>id_notificacion (PK)</li>
+  <li>Mensaje</li>
+  <li>Tipo</li>
+  <li>Leida</li>
+  <li>fecha_envio</li>
+  <li>id_usuario (FK)</li>
+</ul>
 
-    <h3>Notificación</h3>
-    <ul>
-        <li>id_notificacion (PK)</li>
-        <li>Mensaje</li>
-        <li>Tipo</li>
-        <li>Leida</li>
-        <li>fecha_envio</li>
-        <li>id_usuario (FK)</li>
-    </ul>
+<h4>Suscripción</h4>
+<ul>
+  <li>id_suscripcion (PK)</li>
+  <li>Tipo</li>
+  <li>Precio</li>
+  <li>fecha_inicio</li>
+  <li>fecha_fin</li>
+  <li>Estado</li>
+  <li>id_usuario (FK)</li>
+</ul>
 
-    <h3>Suscripción</h3>
-    <ul>
-        <li>id_suscripcion (PK)</li>
-        <li>Tipo</li>
-        <li>Precio</li>
-        <li>fecha_inicio</li>
-        <li>fecha_fin</li>
-        <li>Estado</li>
-        <li>id_usuario (FK)</li>
-    </ul>
+<h4>Género</h4>
+<ul>
+  <li>id_genero (PK)</li>
+  <li>Nombre_genero</li>
+  <li>Descripcion</li>
+</ul>
 
-    <h3>Género</h3>
-    <ul>
-        <li>id_genero (PK)</li>
-        <li>Nombre_genero</li>
-        <li>Descripcion</li>
-    </ul>
+<h4>Pelicula_genero</h4>
+<ul>
+  <li>id_pelicula (FK, PK)</li>
+  <li>id_genero (FK, PK)</li>
+</ul>
 
-    <h3>Pelicula_genero</h3>
-    <ul>
-        <li>id_pelicula (FK, PK)</li>
-        <li>id_genero (FK, PK)</li>
-    </ul>
-
-</body>
-</html>
 
 ```mermaid
 erDiagram
@@ -1620,8 +1614,10 @@ erDiagram
 <h2>Tercera Forma Normal (3FN)</h2>
 
 <p>Una tabla está en 3FN si cumple con los siguientes criterios:</p>
-<p>- Está en 2NF.<br>
-- No hay dependencias transitivas: ningún atributo no clave depende de otro atributo no clave.</p>
+<ul>
+  <li>Está en 2NF.</li>
+  <li>No hay dependencias transitivas: ningún atributo no clave depende de otro atributo no clave.</li>
+</ul>
 
 <h3>Descripción</h3>
 <p>
@@ -1633,182 +1629,203 @@ erDiagram
 
 <h3>Descripción Técnica</h3>
 
-<p><strong>Usuario</strong><br>
-id_usuario (PK)<br>
-nombre<br>
-apellido<br>
-email<br>
-telefono<br>
-contrasena<br>
-rol<br>
-fecha_registro<br>
-ultimo_login<br>
-estado<br>
-avatar<br>
-fecha_nacimiento<br>
-id_pais (FK → PAIS)
-</p>
+<p><strong>Usuario</strong></p>
+<ul>
+  <li>id_usuario (PK)</li>
+  <li>nombre</li>
+  <li>apellido</li>
+  <li>email</li>
+  <li>telefono</li>
+  <li>contrasena</li>
+  <li>rol</li>
+  <li>fecha_registro</li>
+  <li>ultimo_login</li>
+  <li>estado</li>
+  <li>avatar</li>
+  <li>fecha_nacimiento</li>
+  <li>id_pais (FK → PAIS)</li>
+</ul>
 
-<p><strong>Pais</strong><br>
-id_pais (PK)<br>
-nombre_pais<br>
-continente
-</p>
+<p><strong>Pais</strong></p>
+<ul>
+  <li>id_pais (PK)</li>
+  <li>nombre_pais</li>
+  <li>continente</li>
+</ul>
 
-<p><strong>Perfil</strong><br>
-id_perfil (PK)<br>
-nombre_perfil<br>
-avatar<br>
-edad_configurada<br>
-idioma_preferido<br>
-id_usuario (FK)
-</p>
+<p><strong>Perfil</strong></p>
+<ul>
+  <li>id_perfil (PK)</li>
+  <li>nombre_perfil</li>
+  <li>avatar</li>
+  <li>edad_configurada</li>
+  <li>idioma_preferido</li>
+  <li>id_usuario (FK)</li>
+</ul>
 
-<p><strong>Categoría</strong><br>
-id_categoria (PK)<br>
-nombre_categoria<br>
-descripcion<br>
-icono<br>
-fecha_creacion<br>
-creado_por (FK → USUARIO)
-</p>
+<p><strong>Categoría</strong></p>
+<ul>
+  <li>id_categoria (PK)</li>
+  <li>nombre_categoria</li>
+  <li>descripcion</li>
+  <li>icono</li>
+  <li>fecha_creacion</li>
+  <li>creado_por (FK → USUARIO)</li>
+</ul>
 
-<p><strong>Película</strong><br>
-id_pelicula (PK)<br>
-titulo<br>
-descripcion<br>
-año<br>
-duracion<br>
-idioma_original<br>
-imagen_portada<br>
-trailer_url<br>
-estado<br>
-fecha_creacion<br>
-aprobado_por (FK → USUARIO)<br>
-id_categoria (FK → CATEGORIA)
-</p>
+<p><strong>Película</strong></p>
+<ul>
+  <li>id_pelicula (PK)</li>
+  <li>titulo</li>
+  <li>descripcion</li>
+  <li>año</li>
+  <li>duracion</li>
+  <li>idioma_original</li>
+  <li>imagen_portada</li>
+  <li>trailer_url</li>
+  <li>estado</li>
+  <li>fecha_creacion</li>
+  <li>aprobado_por (FK → USUARIO)</li>
+  <li>id_categoria (FK → CATEGORIA)</li>
+</ul>
 
-<p><strong>Subtitulo_pelicula</strong><br>
-id_subtitulo (PK)<br>
-idioma<br>
-id_pelicula (FK → PELICULA)
-</p>
+<p><strong>Subtitulo_pelicula</strong></p>
+<ul>
+  <li>id_subtitulo (PK)</li>
+  <li>idioma</li>
+  <li>id_pelicula (FK → PELICULA)</li>
+</ul>
 
-<p><strong>Temporada</strong><br>
-id_temporada (PK)<br>
-numero_temporada<br>
-fecha_lanzamiento<br>
-descripcion<br>
-id_pelicula (FK → PELICULA)
-</p>
+<p><strong>Temporada</strong></p>
+<ul>
+  <li>id_temporada (PK)</li>
+  <li>numero_temporada</li>
+  <li>fecha_lanzamiento</li>
+  <li>descripcion</li>
+  <li>id_pelicula (FK → PELICULA)</li>
+</ul>
 
-<p><strong>Episodio</strong><br>
-id_episodio (PK)<br>
-titulo<br>
-numero_episodio<br>
-duracion<br>
-fecha_estreno<br>
-id_temporada (FK → TEMPORADA)
-</p>
+<p><strong>Episodio</strong></p>
+<ul>
+  <li>id_episodio (PK)</li>
+  <li>titulo</li>
+  <li>numero_episodio</li>
+  <li>duracion</li>
+  <li>fecha_estreno</li>
+  <li>id_temporada (FK → TEMPORADA)</li>
+</ul>
 
-<p><strong>Reseña</strong><br>
-id_resena (PK)<br>
-titulo<br>
-comentario<br>
-calificacion<br>
-spoilers<br>
-visibilidad<br>
-fecha_creacion<br>
-ultima_modificacion<br>
-editado<br>
-id_usuario (FK)<br>
-id_pelicula (FK)
-</p>
+<p><strong>Reseña</strong></p>
+<ul>
+  <li>id_resena (PK)</li>
+  <li>titulo</li>
+  <li>comentario</li>
+  <li>calificacion</li>
+  <li>spoilers</li>
+  <li>visibilidad</li>
+  <li>fecha_creacion</li>
+  <li>ultima_modificacion</li>
+  <li>editado</li>
+  <li>id_usuario (FK)</li>
+  <li>id_pelicula (FK)</li>
+</ul>
 
-<p><strong>Interacción</strong><br>
-id_interaccion (PK)<br>
-tipo<br>
-fecha<br>
-dispositivo<br>
-ip_origen<br>
-id_usuario (FK)<br>
-id_resena (FK)
-</p>
+<p><strong>Interacción</strong></p>
+<ul>
+  <li>id_interaccion (PK)</li>
+  <li>tipo</li>
+  <li>fecha</li>
+  <li>dispositivo</li>
+  <li>ip_origen</li>
+  <li>id_usuario (FK)</li>
+  <li>id_resena (FK)</li>
+</ul>
 
-<p><strong>Ranking</strong><br>
-id_ranking (PK)<br>
-puntaje_ponderado<br>
-posicion_global<br>
-posicion_categoria<br>
-total_resenas<br>
-likes_totales<br>
-dislikes_totales<br>
-fecha_actualizacion<br>
-id_pelicula (FK)
-</p>
+<p><strong>Ranking</strong></p>
+<ul>
+  <li>id_ranking (PK)</li>
+  <li>puntaje_ponderado</li>
+  <li>posicion_global</li>
+  <li>posicion_categoria</li>
+  <li>total_resenas</li>
+  <li>likes_totales</li>
+  <li>dislikes_totales</li>
+  <li>fecha_actualizacion</li>
+  <li>id_pelicula (FK)</li>
+</ul>
 
-<p><strong>Lista_reproduccion</strong><br>
-id_lista (PK)<br>
-nombre_lista<br>
-descripcion<br>
-privada<br>
-fecha_creacion<br>
-id_usuario (FK)
-</p>
+<p><strong>Lista_reproduccion</strong></p>
+<ul>
+  <li>id_lista (PK)</li>
+  <li>nombre_lista</li>
+  <li>descripcion</li>
+  <li>privada</li>
+  <li>fecha_creacion</li>
+  <li>id_usuario (FK)</li>
+</ul>
 
-<p><strong>Lista_contenido</strong><br>
-id_lista (FK, PK)<br>
-id_pelicula (FK, PK)
-</p>
+<p><strong>Lista_contenido</strong></p>
+<ul>
+  <li>id_lista (FK, PK)</li>
+  <li>id_pelicula (FK, PK)</li>
+</ul>
 
-<p><strong>Historial_visualización</strong><br>
-id_historial (PK)<br>
-fecha_visualizacion<br>
-progreso<br>
-dispositivo<br>
-id_usuario (FK)<br>
-id_pelicula (FK)
-</p>
+<p><strong>Historial_visualización</strong></p>
+<ul>
+  <li>id_historial (PK)</li>
+  <li>fecha_visualizacion</li>
+  <li>progreso</li>
+  <li>dispositivo</li>
+  <li>id_usuario (FK)</li>
+  <li>id_pelicula (FK)</li>
+</ul>
 
-<p><strong>Comentario</strong><br>
-id_comentario (PK)<br>
-texto<br>
-fecha<br>
-editado<br>
-id_usuario (FK)<br>
-id_resena (FK, opcional)<br>
-id_pelicula (FK, opcional)
-</p>
+<p><strong>Comentario</strong></p>
+<ul>
+  <li>id_comentario (PK)</li>
+  <li>texto</li>
+  <li>fecha</li>
+  <li>editado</li>
+  <li>id_usuario (FK)</li>
+  <li>id_resena (FK, opcional)</li>
+  <li>id_pelicula (FK, opcional)</li>
+</ul>
 
-<p><strong>Notificación</strong><br>
-id_notificacion (PK)<br>
-mensaje<br>
-tipo<br>
-leida<br>
-fecha_envio<br>
-id_usuario (FK)
-</p>
+<p><strong>Notificación</strong></p>
+<ul>
+  <li>id_notificacion (PK)</li>
+  <li>mensaje</li>
+  <li>tipo</li>
+  <li>leida</li>
+  <li>fecha_envio</li>
+  <li>id_usuario (FK)</li>
+</ul>
 
-<p><strong>Suscripción</strong><br>
-id_suscripcion (PK)<br>
-tipo<br>
-precio<br>
-fecha_inicio<br>
-fecha_fin<br>
-estado<br>
-id_usuario (FK)
-</p>
+<p><strong>Suscripción</strong></p>
+<ul>
+  <li>id_suscripcion (PK)</li>
+  <li>tipo</li>
+  <li>precio</li>
+  <li>fecha_inicio</li>
+  <li>fecha_fin</li>
+  <li>estado</li>
+  <li>id_usuario (FK)</li>
+</ul>
 
-<p><strong>Género</strong><br>
-id_genero (PK)<br>
-nombre_genero<br>
-descripcion
-</p>
+<p><strong>Género</strong></p>
+<ul>
+  <li>id_genero (PK)</li>
+  <li>nombre_genero</li>
+  <li>descripcion</li>
+</ul>
 
-<p><strong>Pelicula_genero</strong><br>
-id_pelicula (FK, PK)<br>
-id_genero (FK, PK)
-</p>
+<p><strong>Pelicula_genero</strong></p>
+<ul>
+  <li>id_pelicula (FK, PK)</li>
+  <li>id_genero (FK, PK)</li>
+</ul>
+
+
 
 
 ```mermaid
