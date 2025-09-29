@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KarenFlix - Streaming Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos básicos para el sidebar */
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #1a1a1a;
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-content {
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #ccc;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: #333;
+            color: white;
+        }
+
+        .nav-item.active {
+            background: #e50914;
+            color: white;
+        }
+
+        .nav-item img {
+            margin-right: 15px;
+        }
+
+        .nav-item span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+        }
+
+        /* Overlay para cerrar sidebar */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Logo clickeable */
+        .logo {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .logo:hover {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Overlay para cerrar sidebar -->
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar Menu -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-content">
+            <div class="sidebar-header">
+                <div class="search-container">
+                    <input type="text" placeholder="Search content..." class="search-input">
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="home" title="Home" onclick="navigateToPage('home')">
+                    <img src="./imgs/icons8-casa-48.png" alt="Home" width="20" height="20">
+                    <span>Home</span>
+                </a>
+                <a href="#" class="nav-item" data-page="movies" title="Movies" onclick="navigateToPage('movies')">
+                    <img src="./imgs/icons8-película-50 (1).png" alt="Movies" width="20" height="20">
+                    <span>Movies</span>
+                </a>
+                <a href="#" class="nav-item" data-page="series" title="Series" onclick="navigateToPage('series')">
+                    <img src="./imgs/icons8-película.gif" alt="Series" width="20" height="20">
+                    <span>Series</span>
+                </a>
+                <a href="#" class="nav-item" data-page="anime" title="Anime" onclick="navigateToPage('anime')">
+                    <img src="./imgs/icons8-rollo-de-canela-64.png" alt="Anime" width="20" height="20">
+                    <span>Anime</span>
+                </a>
+                <a href="#" class="nav-item" data-page="category" title="Category" onclick="navigateToPage('category')">
+                    <img src="./imgs/icons8-reloj-48.png" alt="Category" width="20" height="20">
+                    <span>Category</span>
+                </a>
+                <a href="#" class="nav-item" data-page="ranking" title="Ranking" onclick="navigateToPage('ranking')">
+                    <img src="./imgs/icons8-me-gusta-52 (1).png" alt="Ranking" width="20" height="20">
+                    <span>Ranking</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item" data-page="profile" title="My Profile" onclick="navigateToPage('profile')">
+                    <img src="./imgs/icons8-person-60.png" alt="Profile" width="20" height="20">
+                    <span>My Profile</span>
+                </a>
+                <a href="#" class="nav-item" data-page="settings" title="Settings" onclick="navigateToPage('settings')">
+                    <img src="./imgs/icons8-ajustes-48.png" alt="Settings" width="20" height="20">
+                    <span>Settings</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo" id="menu-toggle" onclick="toggleSidebar()">K</div>
+                    <div class="header-text">
+                        The most anticipated movies coming soon.
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                    </button>
+                    <button class="icon-btn">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 14 9.5 14c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section with Image Background -->
+        <section class="hero-with-video-bg">
+            <div class="video-background" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
+                <img src="./imgs/img KarenFlix.jpg" alt="KarenFlix Hero Background" style="width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.7;">
+            </div>
+
+            <!-- Hero Content Overlay -->
+            <div class="hero-overlay" style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; height: 100vh; background: transparent;">
+                <div class="hero-content" style="text-align: center; color: white;">
+                    <p class="hero-description">
+                        Explore a unique catalog of movies and series.<br>
+                        Your next binge starts here!
+                    </p>
+                    <h1 class="hero-title">KarenFlix</h1>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="window.location.href='login.html'">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 12l-4.463 2.636-.537-.864L9 12 4 9.228l.537-.864L9 12z"/>
+                            </svg>
+                            Log In
+                        </button>
+                        <button class="btn btn-secondary" onclick="window.location.href='signup.html'">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                            </svg>
+                            Sign Up
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Home Page Content -->
+        <div id="home-page" class="page-content active">
+            <!-- Ranking Global Section -->
+            <section class="ranking-section">
+                <div class="section-header">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
+                    </svg>
+                    <h2>Ranking global</h2>
+                </div>
+                <div class="movies-scroll">
+                    <div class="movie-poster">
+                        <div class="movie-number">1</div>
+                        <img src="flow-movie-poster.jpg" alt="Flow">
+                    </div>
+                    <div class="movie-poster">
+                        <div class="movie-number">2</div>
+                        <img src="memorias-de-un-caracol-movie-poster.jpg" alt="Memorias de un Caracol">
+                    </div>
+                    <div class="movie-poster">
+                        <div class="movie-number">3</div>
+                        <img src="better-man-movie-poster.jpg" alt="Better Man">
+                    </div>
+                    <div class="movie-poster">
+                        <div class="movie-number">4</div>
+                        <img src="mufasa-movie-poster.jpg" alt="Mufasa">
+                    </div>
+                    <div class="movie-poster">
+                        <div class="movie-number">5</div>
+                        <img src="peacemaker-movie-poster.jpg" alt="Peacemaker">
+                    </div>
+                    <div class="movie-poster">
+                        <div class="movie-number">6</div>
+                        <img src="red-one-movie-poster.jpg" alt="Red One">
+                    </div>
+                    <div class="movie-poster">
+                        <div class="movie-number">7</div>
+                        <img src="wicked-movie-poster.jpg" alt="Wicked">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Popular Content Section -->
+            <section class="popular-section">
+                <div class="section-header">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    <h2>Popular content</h2>
+                    <div class="view-all">
+                        <span>view all</span>
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <div class="content-image">
+                            <img src="/placeholder.svg?height=200&width=300" alt="Memorias de un Caracol">
+                            <button class="play-btn">▶</button>
+                        </div>
+                        <div class="content-info">
+                            <h3>Memorias de un Caracol</h3>
+                            <div class="content-meta">
+                                <span class="rating">★★ 8.5</span>
+                                <span>2023</span>
+                                <span class="tag">Drama</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <div class="content-image">
+                            <img src="/placeholder.svg?height=200&width=300" alt="Better Man">
+                            <button class="play-btn">▶</button>
+                        </div>
+                        <div class="content-info">
+                            <h3>Better Man</h3>
+                            <div class="content-meta">
+                                <span class="rating">★★ 7.8</span>
+                                <span>2024</span>
+                                <span class="tag">Biography</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <div class="content-image">
+                            <img src="/placeholder.svg?height=200&width=300" alt="Flow">
+                            <button class="play-btn">▶</button>
+                        </div>
+                        <div class="content-info">
+                            <h3>Flow</h3>
+                            <div class="content-meta">
+                                <span class="rating">★★ 8.2</span>
+                                <span>2024</span>
+                                <span class="tag">Animation</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <div class="content-image">
+                            <img src="/placeholder.svg?height=200&width=300" alt="Mufasa">
+                            <button class="play-btn">▶</button>
+                        </div>
+                        <div class="content-info">
+                            <h3>Mufasa</h3>
+                            <div class="content-meta">
+                                <span class="rating">★★ 7.5</span>
+                                <span>2024</span>
+                                <span class="tag">Family</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-card">
+                        <div class="content-image">
+                            <img src="/placeholder.svg?height=200&width=300" alt="Wicked">
+                            <button class="play-btn">▶</button>
+                        </div>
+                        <div class="content-info">
+                            <h3>Wicked</h3>
+                            <div class="content-meta">
+                                <span class="rating">★★ 8.9</span>
+                                <span>2024</span>
+                                <span class="tag">Musical</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Movies Page -->
+        <div id="movies-page" class="page-content" style="display: none;">
+            <section class="content-section">
+                <div class="section-header">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+                    </svg>
+                    <h2>Movie</h2>
+                    <button class="btn btn-primary" onclick="showAddMovieModal()">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        Add Movie
+                    </button>
+                </div>
+                <div class="content-grid" id="movies-grid">
+                    <!-- Movies will be populated here -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Series Page -->
+        <div id="series-page" class="page-content" style="display: none;">
+            <section class="content-section">
+                <div class="section-header">
+                    <h2>Series</h2>
+                </div>
+                <p>Series content coming soon...</p>
+            </section>
+        </div>
+
+        <!-- Anime Page -->
+        <div id="anime-page" class="page-content" style="display: none;">
+            <section class="content-section">
+                <div class="section-header">
+                    <h2>Anime</h2>
+                </div>
+                <p>Anime content coming soon...</p>
+            </section>
+        </div>
+
+        <!-- Ranking Page -->
+        <div id="ranking-page" class="page-content" style="display: none;">
+            <section class="ranking-section">
+                <div class="section-header">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
+                    </svg>
+                    <h2>Ranking global</h2>
+                </div>
+                <div class="movies-scroll">
+                    <div class="movie-poster">
+                        <div class="movie-number">1</div>
+                        <img src="flow-movie-poster.jpg" alt="Flow">
+                        <div class="movie-info">
+                            <h3>Flow</h3>
+                            <p>Animation • 2024</p>
+                            <div class="rating">★★ 8.2</div>
+                        </div>
+                    </div>
+                    <!-- Más películas aquí -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">KarenFlix</div>
+                    <p>The ultimate streaming platform for movies, series, and anime.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Information</h4>
+                        <ul>
+                            <li><a href="#">About KarenFlix</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Help / Support</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Content</h4>
+                        <ul>
+                            <li><a href="#">Movies</a></li>
+                            <li><a href="#">Series</a></li>
+                            <li><a href="#">Anime</a></li>
+                            <li><a href="#">Documentaries</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2025 KarenFlix. All rights reserved.</p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Accessibility</a>
+                        <a href="#">Cookies</a>
+                        <a href="#">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Toggle sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        // Navigate to different pages
+        function navigateToPage(page) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(p => p.style.display = 'none');
+            
+            // Remove active class from all nav items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            
+            // Show selected page
+            const selectedPage = document.getElementById(page + '-page');
+            if (selectedPage) {
+                selectedPage.style.display = 'block';
+            }
+            
+            // Add active class to clicked nav item
+            const activeNavItem = document.querySelector(`[data-page="${page}"]`);
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
+            
+            // Close sidebar on mobile
+            toggleSidebar();
+        }
+
+        // Modal functions (básicas)
+        function showAddMovieModal() {
+            console.log('Add movie modal');
+        }
+
+        function closeAddMovieModal() {
+            console.log('Close add movie modal');
+        }
+
+        function closeEditMovieModal() {
+            console.log('Close edit movie modal');
+        }
+
+        function deleteMovie() {
+            console.log('Delete movie');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show home page by default
+            navigateToPage('home');
+        });
+    </script>
+</body>
+</html>
