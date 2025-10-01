@@ -2,7 +2,7 @@
 let currentPage = "home";
 let movies = [];
 let currentEditingMovie = null;
-const API_BASE = "http://localhost:1100"; 
+const API_BASE = "http://localhost:1100";
 
 // DOM Elements - Declarados sin asignar inicialmente
 let sidebar, mainContent, menuToggle, sidebarOverlay;
@@ -56,6 +56,54 @@ async function fetchMoviesFromAPI() {
 }
 
 
+
+// --- Función para obtener las películas desde el backend ---
+async function getMovies() {
+  try {
+    const response = await fetch("http://localhost:1100/api/movies");
+    const data = await response.json();
+
+    console.log(data); // ver toda la respuesta en consola
+
+
+    // Selecciona el contenedor principal de películas
+    const movieContainer = document.querySelector(".movie-container");
+    movieContainer.innerHTML = ""; // limpiamos antes de inyectar
+
+    // Solo tomamos las primeras 10 películas
+    const topMovies = data.results.slice(0, 10);
+
+    // data.results -> contiene el array de películas populares
+    topMovies.forEach((movie, index) => {
+      const movieCard = document.createElement("div");
+      movieCard.classList.add("movie-card");
+
+      movieCard.innerHTML = `
+        <div class="movie-poster">
+          <div class="movie-number">${index + 1}</div>
+          <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" 
+               alt="${movie.title}" />
+        </div>
+        <h3>${movie.title}</h3>
+        <p><strong>Rating:</strong> ⭐ ${movie.vote_average.toFixed(1)}</p>
+      `;
+
+      // Se agrega cada película al contenedor
+      movieContainer.appendChild(movieCard);
+    });
+
+  } catch (error) {
+    console.error("Error al obtener películas:", error);
+  }
+}
+
+// --- Llamada inicial ---
+document.addEventListener("DOMContentLoaded", getMovies);
+
+
+
+
+
 /* ===========================
     Sidebar - Abrir/Cerrar 
    =========================== */
@@ -93,6 +141,7 @@ function showPage(pageId) {
   });
 
 
+  
   // Mostrar seleccionada
   const targetPage = document.getElementById(pageId + "-page");
   if (targetPage) {
@@ -129,7 +178,7 @@ function showPage(pageId) {
    Modales de películas osea Add/Edit
    =========================== */
 
-   // Mostrar modal de añadir película
+// Mostrar modal de añadir película
 function showAddMovieModal() {
   const modal = document.getElementById("add-movie-modal");
   if (modal) modal.classList.add("active");
@@ -151,7 +200,7 @@ function showEditMovieModal(movieData) {
   document.getElementById("edit-movie-category").value = movieData.category || ""; // Asegurarse de que no sea undefined
   document.getElementById("edit-movie-image").value = movieData.image || ""; // Asegurarse de que no sea undefined
   document.getElementById("edit-movie-year").value = movieData.year || ""; // Asegurarse de que no sea undefined
-   
+
   const modal = document.getElementById("edit-movie-modal");
   if (modal) modal.classList.add("active");
 }
@@ -171,7 +220,7 @@ function closeEditMovieModal() {
    CRUD de Películas
    =========================== */
 
-   // Guardar cambios de edición para eliminar peli
+// Guardar cambios de edición para eliminar peli
 function deleteMovie() {
   if (currentEditingMovie && confirm("¿Estás seguro de que quieres eliminar esta película?")) {
     movies = movies.filter((movie) => movie.id !== currentEditingMovie.id);
@@ -183,7 +232,7 @@ function deleteMovie() {
 
 // Guardar cambios de edición o agregar nueva peli
 function addMovie(movieData) {
-  const newMovie = { 
+  const newMovie = {
     id: Date.now(),
     ...movieData,
     rating: "8.0"
@@ -242,7 +291,7 @@ function renderMovies() {
    Init App - inicialización del DOM
    =========================== */
 
-   // Esperar a que el DOM esté cargado
+// Esperar a que el DOM esté cargado
 document.addEventListener("DOMContentLoaded", () => {
   sidebar = document.getElementById("sidebar");
   mainContent = document.getElementById("main-content");
