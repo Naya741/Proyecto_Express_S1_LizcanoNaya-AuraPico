@@ -2,6 +2,7 @@
 let currentPage = "home";
 let movies = [];
 let currentEditingMovie = null;
+const API_BASE = "http://localhost:1100"; 
 
 // DOM Elements - Declarados sin asignar inicialmente
 let sidebar, mainContent, menuToggle, sidebarOverlay;
@@ -9,9 +10,18 @@ let sidebar, mainContent, menuToggle, sidebarOverlay;
 /* ===========================
    API - Obtenemos las películas desde backend
    =========================== */
+
 async function fetchMoviesFromAPI() {
   try {
-    const res = await fetch("/api/movies"); // nuestro backend hace el proxy a TMDB
+    const res = await fetch(`${API_BASE}/api/movies`, {
+      // Si algún día necesitas cookies/headers, agrégalos aquí
+      // credentials: "include"
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`API ${res.status}: ${text}`);
+    }
+
     const data = await res.json();
 
     if (data.results) {
@@ -19,23 +29,32 @@ async function fetchMoviesFromAPI() {
         id: movie.id,
         name: movie.title,
         description: movie.overview,
-        category: movie.genre_ids && movie.genre_ids.length > 0 ? movie.genre_ids[0] : "Sin categoría",
+        category: movie.genre_ids?.length ? movie.genre_ids[0] : "Sin categoría",
         year: movie.release_date ? movie.release_date.split("-")[0] : "N/A",
         image: movie.poster_path
           ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
           : "/placeholder.svg?height=200&width=300",
         rating: movie.vote_average ? movie.vote_average.toFixed(1) : "N/A"
       }));
-
       console.log("Películas obtenidas desde la API:", movies);
       renderMovies();
     } else {
-      console.warn("La API no devolvió resultados");
+      console.warn("La API no devolvió resultados válidos:", data);
     }
   } catch (err) {
     console.error("Error al obtener películas desde el backend:", err);
+    // Feedback visual mínimo si falla
+    const moviesGrid = document.getElementById("movies-grid");
+    if (moviesGrid) {
+      moviesGrid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; color: #f55; padding: 2rem;">
+          <p>No se pudo cargar el catálogo. Revisa que el backend esté en <code>${API_BASE}</code>.</p>
+        </div>
+      `;
+    }
   }
 }
+
 
 /* ===========================
     Sidebar - Abrir/Cerrar 
