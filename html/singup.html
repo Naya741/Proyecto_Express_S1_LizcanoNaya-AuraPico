@@ -1,122 +1,130 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KarenFlix - Create Account</title>
-  <link rel="stylesheet" href="../styles/styles.css"/>
+  <link rel="stylesheet" href="../styles/styles.css" />
   <link rel="icon" href="./imgs/logoK.png">
   <!-- Fuentes profesionales -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
 </head>
+
 <body>
 
   <div class="auth-page active">
-    <div class="auth-container"> 
+    <div class="auth-container">
       <!-- Lado izquierdo (video o poster) -->
       <div class="auth-page active">
         <div class="auth-container">
-            <!-- Lado Izquierdo - Video -->
-            <div class="auth-left">
-                <video class="auth-video" autoplay muted loop playsinline>
-                    <source src="../imgs/pantalladeinicio (online-video-cutter.com).mp4"video/mp4">
-                    <source src="../imgs/pantalladeinicio (online-video-cutter.com).mp4"video/webm">
-                    Tu navegador no soporta el elemento video.
-                </video>
-            </div>
-
-      <!-- Lado derecho (formulario) -->
-      <div class="auth-right">
-        <button class="back-btn" onclick="window.location.href='index.html'">
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-          </svg>
-        </button>
-
-        <div class="logo-auth">K</div>
-        <h2>Create Account</h2>
-
-        <form class="auth-form" id="signup-form">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input id="name" name="name" type="text" placeholder="Enter your name" required>
+          <!-- Lado Izquierdo - Video -->
+          <div class="auth-left">
+            <video class="auth-video" autoplay muted loop playsinline>
+              <source src="../imgs/pantalladeinicio (online-video-cutter.com).mp4" video/mp4">
+              <source src="../imgs/pantalladeinicio (online-video-cutter.com).mp4" video/webm">
+              Tu navegador no soporta el elemento video.
+            </video>
           </div>
 
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input id="email" name="email" type="email" placeholder="Enter your email address" required>
+          <!-- Lado derecho (formulario) -->
+          <div class="auth-right">
+            <a href="../index.html">
+              <button class="back-btn">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+                </svg>
+              </button>
+            </a>
+
+            <div class="logo-auth">K</div>
+            <h2>Create Account</h2>
+
+            <form class="auth-form" id="signup-form">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input id="name" name="name" type="text" placeholder="Enter your name" required>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input id="email" name="email" type="email" placeholder="Enter your email address" required>
+              </div>
+
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" placeholder="Enter your password" required>
+              </div>
+
+              <div class="form-group">
+                <label for="confirm-password">Confirm password</label>
+                <input id="confirm-password" name="confirm-password" type="password" placeholder="Confirm your password"
+                  required>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                Create Account
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+              </button>
+            </form>
+
+            <p class="auth-switch">
+              Fill in your details to get started. Already have an account?
+              <a href="login.html">Log In →</a>
+            </p>
           </div>
-
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password" placeholder="Enter your password" required>
-          </div>
-
-          <div class="form-group">
-            <label for="confirm-password">Confirm password</label>
-            <input id="confirm-password" name="confirm-password" type="password" placeholder="Confirm your password" required>
-          </div>
-
-          <button type="submit" class="btn btn-primary">
-            Create Account
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-            </svg>
-          </button>
-        </form>
-
-        <p class="auth-switch">
-          Fill in your details to get started. Already have an account?
-          <a href="login.html">Log In →</a>
-        </p>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <script>
-    // Script mejorado para el formulario de registro
-    document.addEventListener("DOMContentLoaded", function() {
-      const signupForm = document.getElementById("signup-form");
-      
-      if (signupForm) {
-        signupForm.addEventListener("submit", function (e) {
-          e.preventDefault();
-          
-          // Obtener valores
-          const name = document.getElementById("name").value.trim();
-          const email = document.getElementById("email").value.trim();
-          const password = document.getElementById("password").value.trim();
-          const confirmPassword = document.getElementById("confirm-password").value.trim();
+      <script>
+        // Script mejorado para el formulario de registro
+        document.addEventListener("DOMContentLoaded", function () {
+          const signupForm = document.getElementById("signup-form");
 
-          // Validaciones
-          if (!name || !email || !password || !confirmPassword) {
-            alert("Please fill in all fields");
-            return;
+          if (signupForm) {
+            signupForm.addEventListener("submit", function (e) {
+              e.preventDefault();
+
+              // Obtener valores
+              const name = document.getElementById("name").value.trim();
+              const email = document.getElementById("email").value.trim();
+              const password = document.getElementById("password").value.trim();
+              const confirmPassword = document.getElementById("confirm-password").value.trim();
+
+              // Validaciones
+              if (!name || !email || !password || !confirmPassword) {
+                alert("Please fill in all fields");
+                return;
+              }
+
+              if (password !== confirmPassword) {
+                alert("Passwords do not match");
+                return;
+              }
+
+              if (password.length < 6) {
+                alert("Password must be at least 6 characters long");
+                return;
+              }
+
+              // Si todo está bien
+              alert(`✅ Account created successfully for ${name} (${email})`);
+
+              // Opcional: limpiar formulario
+              signupForm.reset();
+
+              // Opcional: redirigir después de 2 segundos
+              setTimeout(() => {
+                window.location.href = "login.html";
+              }, 2000);
+            });
           }
-
-          if (password !== confirmPassword) {
-            alert("Passwords do not match");
-            return;
-          }
-
-          if (password.length < 6) {
-            alert("Password must be at least 6 characters long");
-            return;
-          }
-
-          // Si todo está bien
-          alert(`✅ Account created successfully for ${name} (${email})`);
-          
-          // Opcional: limpiar formulario
-          signupForm.reset();
-          
-          // Opcional: redirigir después de 2 segundos
-          setTimeout(() => {
-            window.location.href = "login.html";
-          }, 2000);
         });
-      }
-    });
-  </script>
+      </script>
 </body>
+
 </html>

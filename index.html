@@ -116,7 +116,8 @@
 
 <body>
     <!-- Overlay para cerrar sidebar -->
-    <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
 
     <!-- Sidebar Menu -->
     <div id="sidebar" class="sidebar">
@@ -127,37 +128,37 @@
                 </div>
             </div>
             <nav class="sidebar-nav">
-                <a href="#" class="nav-item active" data-page="home" title="Home" onclick="navigateToPage('home')">
+                <a href="#" class="nav-item active" data-page="home" title="Home">
                     <img src="./imgs/icons8-casa-48.png" alt="Home" width="20" height="20">
                     <span>Home</span>
                 </a>
-                <a href="#" class="nav-item" data-page="movies" title="Movies" onclick="navigateToPage('movies')">
+                <a href="#" class="nav-item" data-page="movies" title="Movies">
                     <img src="./imgs/icons8-película-50 (1).png" alt="Movies" width="20" height="20">
                     <span>Movies</span>
                 </a>
-                <a href="#" class="nav-item" data-page="series" title="Series" onclick="navigateToPage('series')">
+                <a href="#" class="nav-item" data-page="series" title="Series">
                     <img src="./imgs/icons8-película.gif" alt="Series" width="20" height="20">
                     <span>Series</span>
                 </a>
-                <a href="#" class="nav-item" data-page="anime" title="Anime" onclick="navigateToPage('anime')">
+                <a href="#" class="nav-item" data-page="anime" title="Anime">
                     <img src="./imgs/icons8-rollo-de-canela-64.png" alt="Anime" width="20" height="20">
                     <span>Anime</span>
                 </a>
-                <a href="#" class="nav-item" data-page="category" title="Category" onclick="navigateToPage('category')">
+                <a href="#" class="nav-item" data-page="category" title="Category">
                     <img src="./imgs/icons8-reloj-48.png" alt="Category" width="20" height="20">
                     <span>Category</span>
                 </a>
-                <a href="#" class="nav-item" data-page="ranking" title="Ranking" onclick="navigateToPage('ranking')">
+                <a href="#" class="nav-item" data-page="ranking" title="Ranking">
                     <img src="./imgs/icons8-me-gusta-52 (1).png" alt="Ranking" width="20" height="20">
                     <span>Ranking</span>
                 </a>
             </nav>
             <div class="sidebar-footer">
-                <a href="#" class="nav-item" data-page="profile" title="My Profile" onclick="navigateToPage('profile')">
+                <a href="#" class="nav-item" data-page="profile" title="My Profile">
                     <img src="./imgs/icons8-person-60.png" alt="Profile" width="20" height="20">
                     <span>My Profile</span>
                 </a>
-                <a href="#" class="nav-item" data-page="settings" title="Settings" onclick="navigateToPage('settings')">
+                <a href="#" class="nav-item" data-page="settings" title="Settings">
                     <img src="./imgs/icons8-ajustes-48.png" alt="Settings" width="20" height="20">
                     <span>Settings</span>
                 </a>
@@ -177,7 +178,7 @@
                     </div>
                 </div>
                 <div class="header-right">
-                    <button class="icon-btn">
+                    <button class="icon-btn" >
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                             <path
                                 d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
@@ -345,7 +346,7 @@
                             d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z" />
                     </svg>
                     <h2>Movie</h2>
-                    <button class="btn btn-primary" onclick="showAddMovieModal()">
+                    <button class="btn btn-primary" id="add-movie-btn">
                         <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                         </svg>
@@ -451,65 +452,6 @@
         </footer>
     </div>
     <script src="./script/script.js"></script>
-    <script>
-        // Toggle sidebar
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
-        }
-
-        // Navigate to different pages
-        function navigateToPage(page) {
-            // Hide all pages
-            const pages = document.querySelectorAll('.page-content');
-            pages.forEach(p => p.style.display = 'none');
-
-            // Remove active class from all nav items
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => item.classList.remove('active'));
-
-            // Show selected page
-            const selectedPage = document.getElementById(page + '-page');
-            if (selectedPage) {
-                selectedPage.style.display = 'block';
-            }
-
-            // Add active class to clicked nav item
-            const activeNavItem = document.querySelector(`[data-page="${page}"]`);
-            if (activeNavItem) {
-                activeNavItem.classList.add('active');
-            }
-
-            // Close sidebar on mobile
-            toggleSidebar();
-        }
-
-        // Modal functions (básicas)
-        function showAddMovieModal() {
-            console.log('Add movie modal');
-        }
-
-        function closeAddMovieModal() {
-            console.log('Close add movie modal');
-        }
-
-        function closeEditMovieModal() {
-            console.log('Close edit movie modal');
-        }
-
-        function deleteMovie() {
-            console.log('Delete movie');
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function () {
-            // Show home page by default
-            navigateToPage('home');
-        });
-    </script>
 </body>
 
 </html>
