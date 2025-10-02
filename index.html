@@ -178,7 +178,7 @@
                     </div>
                 </div>
                 <div class="header-right">
-                    <button class="icon-btn" >
+                    <button class="icon-btn">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                             <path
                                 d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
@@ -256,85 +256,17 @@
                     </svg>
                     <h2>Popular content</h2>
                     <div class="view-all">
-                        <span>view all</span>
+                        <a href=""><span>view all</span></a>
                         <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
                         </svg>
                     </div>
                 </div>
-                <div class="content-grid">
-                    <div class="content-card">
-                        <div class="content-image">
-                            <img src="" alt="Memorias de un Caracol">
-                            <button class="play-btn">▶</button>
-                        </div>
-                        <div class="content-info">
-                            <h3>Memorias de un Caracol</h3>
-                            <div class="content-meta">
-                                <span class="rating">★★ 8.5</span>
-                                <span>2023</span>
-                                <span class="tag">Drama</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="content-card">
-                        <div class="content-image">
-                            <img src="" alt="Better Man">
-                            <button class="play-btn">▶</button>
-                        </div>
-                        <div class="content-info">
-                            <h3>Better Man</h3>
-                            <div class="content-meta">
-                                <span class="rating">★★ 7.8</span>
-                                <span>2024</span>
-                                <span class="tag">Biography</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="content-card">
-                        <div class="content-image">
-                            <img src="" alt="Flow">
-                            <button class="play-btn">▶</button>
-                        </div>
-                        <div class="content-info">
-                            <h3>Flow</h3>
-                            <div class="content-meta">
-                                <span class="rating">★★ 8.2</span>
-                                <span>2024</span>
-                                <span class="tag">Animation</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="content-card">
-                        <div class="content-image">
-                            <img src="" alt="Mufasa">
-                            <button class="play-btn">▶</button>
-                        </div>
-                        <div class="content-info">
-                            <h3>Mufasa</h3>
-                            <div class="content-meta">
-                                <span class="rating">★★ 7.5</span>
-                                <span>2024</span>
-                                <span class="tag">Family</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="content-card">
-                        <div class="content-image">
-                            <img src="" alt="Wicked">
-                            <button class="play-btn">▶</button>
-                        </div>
-                        <div class="content-info">
-                            <h3>Wicked</h3>
-                            <div class="content-meta">
-                                <span class="rating">★★ 8.9</span>
-                                <span>2024</span>
-                                <span class="tag">Musical</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+                <!-- La grilla se llena desde JS -->
+                <div class="content-grid popular-grid"></div>
             </section>
+
         </div>
 
         <!-- Movies Page -->
@@ -353,7 +285,8 @@
                         Add Movie
                     </button>
                 </div>
-                <div class="content-grid" id="movies-grid">
+                <div class="content-grid movies-grid"></div>
+
                     <!-- Movies will be populated here -->
                 </div>
             </section>
@@ -365,7 +298,7 @@
                 <div class="section-header">
                     <h2>Series</h2>
                 </div>
-                <p>Series content coming soon...</p>
+                <div class="content-grid" class="series-grid"></div>
             </section>
         </div>
 
@@ -375,7 +308,7 @@
                 <div class="section-header">
                     <h2>Anime</h2>
                 </div>
-                <p>Anime content coming soon...</p>
+                <div class="content-grid" class="anime-grid"></div>
             </section>
         </div>
 
@@ -452,6 +385,8 @@
         </footer>
     </div>
     <script src="./script/script.js"></script>
+    <script src="./script/other.js"></script>
+    <script type="module" src="./script/movieandserie.js"></script>
 </body>
 
 </html>
