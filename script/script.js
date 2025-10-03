@@ -2,6 +2,70 @@
 let currentPage = "home";
 let movies = [];
 let currentEditingMovie = null;
+// ====== API CONFIG ======
+export const API_BASE = "https://proyecto-express-s1-picoaura-lizcanonaya.onrender.com";
+
+
+
+
+// Helper genérico con cookies
+async function request(path, { method = "GET", headers = {}, body } = {}) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method,
+    headers: {
+      "Accept": "application/json",
+      ...(body ? { "Content-Type": "application/json" } : {}),
+      ...headers,
+    },
+    body: body ? JSON.stringify(body) : undefined,
+    credentials: "include", // <- IMPORTANTE para enviar/recibir la cookie
+  });
+
+  // Si el backend devuelve HTML (p.e. error 404), evitamos JSON.parse
+  const ct = res.headers.get("content-type") || "";
+  if (!res.ok) {
+    const text = ct.includes("application/json") ? await res.json() : await res.text();
+    throw new Error(
+      typeof text === "string" ? `HTTP ${res.status}: ${text}` : `HTTP ${res.status}: ${text?.msg || "Error"}`
+    );
+  }
+  return ct.includes("application/json") ? res.json() : res.text();
+}
+
+// ====== AUTH API ======
+export const AuthAPI = {
+  // Login que setea cookie HttpOnly en el backend
+  async login(email, password) {
+    return request("/api/auth/login", {
+      method: "POST",
+      body: { email, password },
+    });
+  },
+  // Logout que limpia la cookie
+  async logout() {
+    return request("/api/auth/logout", { method: "POST" });
+  },
+  // Lee el usuario actual (debe existir ruta protegida que la devuelva)
+  async me() {
+    // Ajusta el path a tu endpoint protegido que retorna los datos de usuario.
+    return request("/api/users/me");
+  },
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // DOM Elements - Declarados sin asignar inicialmente
 let sidebar, mainContent, menuToggle, sidebarOverlay;
