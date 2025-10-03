@@ -451,6 +451,14 @@ window.showCategory = (genre = KNOWN_GENRES[0] || "Acción") => {
 
 
 
+// ========================
+// AGREGAR PELICULA (modal)
+// ========================
+// Aquí podemos añadir la lógica para manejar el formulario de añadir película
+
+
+
+
 
 
 // Dispara Popular content sin tocar tu getMovies()
