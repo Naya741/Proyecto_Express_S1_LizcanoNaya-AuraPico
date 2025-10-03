@@ -1,4 +1,3 @@
-// script/signup.js
 const API_BASE = "https://proyecto-express-s1-picoaura-lizcanonaya.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {

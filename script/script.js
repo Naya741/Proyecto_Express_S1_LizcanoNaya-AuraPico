@@ -3,7 +3,7 @@ let currentPage = "home";
 let movies = [];
 let currentEditingMovie = null;
 // ====== API CONFIG ======
-export const API_BASE = "https://proyecto-express-s1-picoaura-lizcanonaya.onrender.com";
+const API_BASE = "https://proyecto-express-s1-picoaura-lizcanonaya.onrender.com";
 
 
 
@@ -335,3 +335,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 });
+
+
