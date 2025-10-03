@@ -9,6 +9,15 @@
     <link rel="icon" href="./imgs/logoK.png">
     <style>
         /* Estilos básicos para el sidebar */
+
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
         .sidebar {
             position: fixed;
             left: -250px;
@@ -270,7 +279,7 @@
         </div>
 
         <!-- Movies Page -->
-        <div id="movies-page" class="page-content" style="display: none;">
+        <div id="movies-page" class="page-content">
             <section class="content-section">
                 <div class="section-header">
                     <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
@@ -286,29 +295,36 @@
                     </button>
                 </div>
                 <div class="content-grid movies-grid"></div>
-
-                    <!-- Movies will be populated here -->
-                </div>
             </section>
         </div>
 
         <!-- Series Page -->
-        <div id="series-page" class="page-content" style="display: none;">
+        <div id="series-page" class="page-content">
             <section class="content-section">
                 <div class="section-header">
                     <h2>Series</h2>
                 </div>
-                <div class="content-grid" class="series-grid"></div>
+                <div class="content-grid series-grid"></div>
             </section>
         </div>
 
         <!-- Anime Page -->
-        <div id="anime-page" class="page-content" style="display: none;">
+        <div id="anime-page" class="page-content">
             <section class="content-section">
                 <div class="section-header">
                     <h2>Anime</h2>
                 </div>
-                <div class="content-grid" class="anime-grid"></div>
+                <div class="content-grid anime-grid"></div>
+            </section>
+        </div>
+
+        <!-- Category Page -->
+        <div id="category-page" class="page-content">
+            <section class="content-section">
+                <div class="section-header">
+                    <h2>Anime</h2>
+                </div>
+                <div class="content-grid category-grid"></div>
             </section>
         </div>
 
@@ -321,18 +337,21 @@
                     </svg>
                     <h2>Ranking global</h2>
                 </div>
+
                 <div class="movies-scroll">
-                    <div class="movie-poster">
-                        <div class="movie-number">1</div>
-                        <img src="" alt="Flow">
-                        <div class="movie-info">
-                            <h3>Flow</h3>
-                            <p>Animation • 2024</p>
-                            <div class="rating">★★ 8.2</div>
-                        </div>
-                    </div>
-                    <!-- Más películas aquí -->
+                    <div class="ranking-grid-50"></div>
                 </div>
+            </section>
+        </div>
+
+
+        <!-- Category Page -->
+        <div id="category-page" class="page-content">
+            <section class="content-section">
+                <div class="section-header">
+                    <h2>Anime</h2>
+                </div>
+                <div class="content-grid category-grid"></div>
             </section>
         </div>
 

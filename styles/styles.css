@@ -1450,6 +1450,58 @@ h6 {
   transition: transform 0.3s ease;
 }
 
+/* Grid para el ranking de 50 */
+.ranking-grid-50 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.ranking-card {
+  background: #0f0f0f;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.ranking-poster {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 2/3;
+  background: #222;
+}
+
+.ranking-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ranking-number {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: #e50914;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.ranking-title {
+  margin: 8px 0 4px;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.ranking-meta {
+  color: #bbb;
+  font-size: 12px;
+}
+
+
 
 
 

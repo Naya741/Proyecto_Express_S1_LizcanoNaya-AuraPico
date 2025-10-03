@@ -1,13 +1,27 @@
 const API_BASE = "https://proyecto-express-s1-picoaura-lizcanonaya.onrender.com";   // Cambia esto según tu backend
-const CATALOG  = `${API_BASE}/api/catalogo`; // <-- usa tu ruta real
+const CATALOG = `${API_BASE}/api/catalogo`; // <-- usa tu ruta real
+const CATEGORY_GENRE_BASE = `${CATALOG}/genre`;
+
+// Lista rápida de géneros habituales (ajústala a tu DB)
+const KNOWN_GENRES = [
+  "Acción", "Aventura", "Animación", "Comedia", "Crimen",
+  "Drama", "Fantasía", "Ciencia ficción", "Suspense", "Misterio",
+  "Terror", "Romance", "Familia" , "Música", "Bélica", "Historia", 
+  "Western" 
+];
 
 
+// ========================
+//  CATÁLOGO GENERAL (Movies, Series, Anime)
+// ========================
 // Adapta un ítem del catálogo a la UI
 function mapCatalogItem(it) {
-  const yearFromFirst = it?.first_air_date ? String(it.first_air_date).slice(0, 4) : null;
-  const yearFromRel   = it?.release_date ? String(it.release_date).slice(0, 4) : null;
-  const categoria = (it?.categoria || "").toLowerCase();
 
+  // Extrae el año de first_air_date o release_date si year no está
+  const yearFromFirst = it?.first_air_date ? String(it.first_air_date).slice(0, 4) : null;
+  const yearFromRel = it?.release_date ? String(it.release_date).slice(0, 4) : null;
+
+  // Asegúrate de que los campos coincidan con los que devuelve tu API
   return {
     id: String(it?._id ?? it?.tmdb_id ?? ""),
     name: it?.title ?? "Sin título",
@@ -15,28 +29,17 @@ function mapCatalogItem(it) {
     image: it?.poster || "/placeholder.svg?height=200&width=300",
     rating: (typeof it?.vote_average === "number") ? it.vote_average.toFixed(1) : "N/A",
     popularity: (typeof it?.popularity === "number") ? it.popularity : 0,
-    category: categoria
+    // categoria viene como "movie" | "serie" | "anime"
+    category: (it?.categoria || "").toLowerCase()
   };
 }
 
 
-// Ítems del fallback TMDB popular (/api/movies) 
-// (lo dejo igual por si lo usas en otra parte; Popular content YA NO lo usa)
-function mapTMDBItem(m) {
-  return {
-    id: String(m?.id ?? ""),
-    name: m?.title ?? m?.name ?? "Sin título",
-    year: m?.release_date ? String(m.release_date).slice(0, 4) : "N/A",
-    image: m?.poster_path
-      ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
-      : "/placeholder.svg?height=200&width=300",
-    rating: (typeof m?.vote_average === "number") ? m.vote_average.toFixed(1) : "N/A",
-    popularity: (typeof m?.popularity === "number") ? m.popularity : 0,
-    category: "peliculas"
-  };
-}
 
 
+// ========================
+//  RENDER GENÉRICO DE LISTA A UN SELECTOR
+// ========================
 
 // Render genérico a un selector
 function renderListToSelector(list, selector) {
@@ -63,7 +66,7 @@ function renderListToSelector(list, selector) {
         <div class="content-meta">
           <span class="rating">★ ${item.rating || "N/A"}</span>
           <span>${item.year}</span>
-          <span class="tag">películas</span>
+          <span class="tag">${item.category}</span>
         </div>
       </div>
     </div>
@@ -74,20 +77,17 @@ function renderListToSelector(list, selector) {
 
 
 // ========================
-//  APARTADO DE INSERTAR PELÍCULAS Y CATALOGO INCIIAL DE INDEX 
+//  RANKING GLOBAL (Home) usando /api/catalogo/popular
 // ========================
 
-
-// Renderizar top 10 películas en la página de inicio (home) 
-function renderTop10() {
-  const movieContainer = document.querySelector(".movie-container");
-
+function renderRanking(list, containerSelector = ".movie-container") {
+  const movieContainer = document.querySelector(containerSelector);
   if (!movieContainer) return;
 
   movieContainer.innerHTML = "";
-  const topMovies = movies.slice(0, 10);
 
-  topMovies.forEach((movie, index) => {
+  const top = list.slice(0, 10);
+  top.forEach((movie, index) => {
     const card = document.createElement("div");
     card.classList.add("movie-card");
     card.innerHTML = `
@@ -102,50 +102,130 @@ function renderTop10() {
   });
 }
 
+// Alternativa: cargar el ranking global usando /api/catalogo/popular y filtrar movies
+// Útil si tu endpoint /ranking no está listo o no soporta bien categorías
+// (esto carga más datos y filtra en el front, pero es mejor que nada)
 
+// Carga ranking desde tu backend (si no pasas categoria -> mezcla de todo)
 
+async function loadRankingGlobalFromBackend({
+  categoria = "",          // "" => TODAS (movie, serie, anime)
+  limit = 10,
+  containerSelector = ".movie-container",
+} = {}) {
+  const container = document.querySelector(containerSelector);
+  if (container) {
+    container.innerHTML = `
+      <div style="text-align:center;color:#999;padding:1.5rem;">
+        Cargando ranking…
+      </div>`;
+  }
 
-// --- Función para obtener las películas desde el backend ---
-async function getMovies() {
   try {
-    const response = await fetch(`${API_BASE}/api/movies`);
-    const data = await response.json();
+    // arma la URL sin categoria si no viene
+    const params = new URLSearchParams();
+    if (categoria) params.set("categoria", categoria);
+    params.set("limit", String(limit));
+    const url = `${CATALOG}/ranking?${params.toString()}`;
 
-    console.log(data); // ver toda la respuesta en consola
+    const res = await fetch(url, { headers: { Accept: "application/json" } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    // Selecciona el contenedor principal de películas
-    const movieContainer = document.querySelector(".movie-container");
-    movieContainer.innerHTML = ""; // limpiamos antes de inyectar
+    const raw = await res.json();
+    const docs = Array.isArray(raw) ? raw : (raw.documents || raw.results || []);
+    const list = docs.map(mapCatalogItem); // ya viene ordenado por vote_average (backend)
 
-    // Solo tomamos las primeras 10 películas
-    const topMovies = data.results.slice(0, 10);
-
-    // data.results -> contiene el array de películas populares
-    topMovies.forEach((movie, index) => {
-      const movieCard = document.createElement("div");
-      movieCard.classList.add("movie-card");
-
-      movieCard.innerHTML = `
-        <div class="movie-poster">
-          <div class="movie-number">${index + 1}</div>
-          <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" 
-               alt="${movie.title}" />
-        </div>
-        <h3>${movie.title}</h3>
-        <p><strong>Rating:</strong> ⭐ ${movie.vote_average.toFixed(1)}</p>
-      `;
-
-      // Se agrega cada película al contenedor
-      movieContainer.appendChild(movieCard);
-    });
-
-  } catch (error) {
-    console.error("Error al obtener películas:", error);
+    renderRanking(list, containerSelector);
+  } catch (err) {
+    console.error("[ranking] no se pudo cargar:", err);
+    if (container) {
+      container.innerHTML = `
+        <div style="text-align:center;color:#e66;padding:1.5rem;">
+          No se pudo cargar el ranking.
+        </div>`;
+    }
   }
 }
 
 
 
+
+// ========================
+// APARTADO DE RANKING  (Despliege)
+// ========================
+
+// ===== RANKING PAGE =====
+function renderRankingGrid50(list) {
+  const grid = document.querySelector(".ranking-grid-50");
+  if (!grid) return;
+
+  if (!Array.isArray(list) || !list.length) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;color:#888;padding:1.5rem;">
+        No hay resultados para el ranking.
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map((movie, index) => `
+    <div class="ranking-card">
+      <div class="ranking-poster">
+        <div class="ranking-number">${index + 1}</div>
+        <img src="${movie.image}" alt="${movie.name}">
+      </div>
+      <h3 class="ranking-title">${movie.name}</h3>
+      <p class="ranking-meta">★ ${movie.rating ?? "N/A"} • ${movie.year ?? ""}</p>
+    </div>
+  `).join("");
+}
+
+export async function loadRankingPage(limit = 100) {
+  const grid = document.querySelector(".ranking-grid-50");
+  if (!grid) return;
+
+  grid.innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;color:#999;padding:1.5rem;">
+      Cargando ranking…
+    </div>`;
+
+  try {
+    // ranking de TODAS las categorías, ordenado por vote_average (ya lo hace tu backend)
+    const res = await fetch(`${CATALOG}/ranking?limit=${limit}`, {
+      headers: { Accept: "application/json" }
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const raw  = await res.json();
+    const docs = Array.isArray(raw) ? raw : (raw.documents || raw.results || []);
+    const list = docs.map(mapCatalogItem); // usa tu adaptador actual
+
+    renderRankingGrid50(list);
+  } catch (err) {
+    console.error("[ranking-page] error:", err);
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;color:#e66;padding:1.5rem;">
+        No se pudo cargar el ranking.
+      </div>`;
+  }
+}
+
+// Si quieres cargarlo automáticamente cuando la página Ranking se hace visible:
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.querySelector("#ranking-page .ranking-grid-50")) {
+    loadRankingPage(100);
+  }
+});
+
+
+
+
+
+
+
+
+// ========================
+//  APARTADO DE POPULARES
+// ========================
 
 // ---- Popular content usando SOLO tu endpoint /api/catalogo/popular ----
 async function loadPopularContent(limit = 20) {
@@ -163,9 +243,11 @@ async function loadPopularContent(limit = 20) {
     const res = await fetch(url, { headers: { Accept: "application/json" } });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
+    // Extraemos la lista de documentos (ajusta según tu API)
+
     const raw = await res.json();
     const docs = Array.isArray(raw) ? raw
-               : (raw.documents || raw.results || raw.items || []);
+      : (raw.documents || raw.results || raw.items || []);
     let list = docs.map(mapCatalogItem);
 
     // (opcional) ordenar por popularidad si el backend ya lo hace no es necesario
@@ -193,59 +275,193 @@ async function loadPopularContent(limit = 20) {
   }
 }
 
+// ================================
 
 
-// View All → ir a la página de Movies
-document.addEventListener("DOMContentLoaded", () => {
-  const viewAllLink = document.querySelector(".popular-section .view-all a");
-  if (!viewAllLink) return;
 
-  viewAllLink.addEventListener("click", (e) => {
-    e.preventDefault();
 
-    // 1) Si tu app ya tiene navegación centralizada:
-    if (typeof window.navigateToPage === "function") {
-      window.navigateToPage("movies");
-    } else {
-      // 2) Fallback simple: mostrar #movies-page y ocultar las demás
-      document.querySelectorAll(".page-content").forEach(p => p.classList.remove("active"));
-      const moviesPage = document.getElementById("movies-page");
-      if (moviesPage) moviesPage.classList.add("active");
+// ========================
+//  CARGA Y RENDERIZADO GENÉRICO
+// ========================
 
-      // Marcar el item de navegación como activo (opcional)
-      document.querySelectorAll(".nav-item").forEach(a => {
-        a.classList.toggle("active", a.dataset.page === "movies");
-      });
-    }
+// Función genérica para cargar y renderizar una lista en un selector dado
 
-    // Cerrar sidebar si está abierto (opcional)
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("sidebar-overlay");
-    if (sidebar?.classList.contains("open")) {
-      sidebar.classList.remove("open");
-      overlay?.classList.remove("active");
-    }
+async function fetchAndRender({ url, selector, limit = 50 }) {
+  const grid = document.querySelector(selector);
+  if (!grid) return;
 
-    // Subir al inicio
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  grid.innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;color:#999;padding:1.5rem;">
+      Cargando…
+    </div>`;
 
-    // Si tienes una función para cargar el grid de películas, llámala (opcional)
-    if (typeof window.loadMoviesPage === "function") {
-      window.loadMoviesPage();          // o loadMoviesGrid(50) si la tienes
-    }
+  try {
+    const res = await fetch(url, { headers: { Accept: "application/json" } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const raw = await res.json();
+
+    const list = (Array.isArray(raw) ? raw : []).map(mapCatalogItem);
+    const slice = list.slice(0, limit); // “hasta 50” o lo que haya
+
+    renderListToSelector(slice, selector);
+  } catch (err) {
+    console.error(`[fetchAndRender] ${url} error:`, err);
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;color:#e66;padding:1.5rem;">
+        No se pudo cargar esta sección.
+      </div>`;
+  }
+}
+
+// ========================
+
+
+
+/* =========================
+   CARGADORES POR SECCIÓN
+========================= */
+
+// Carga y renderiza el grid de Movies
+export function loadMoviesGrid(limit = 100) {
+  return fetchAndRender({
+    url: `${CATALOG}/movies`,
+    selector: ".movies-grid",
+    limit
   });
+}
+
+// Carga y renderiza el grid de Series
+export function loadSeriesGrid(limit = 100) {
+  return fetchAndRender({
+    url: `${CATALOG}/series`,
+    selector: ".series-grid",
+    limit
+  });
+}
+
+// Carga y renderiza el grid de Anime
+export function loadAnimeGrid(limit = 100) {
+  return fetchAndRender({
+    url: `${CATALOG}/animes`,
+    selector: ".anime-grid",
+    limit
+  });
+}
+
+
+
+
+
+
+
+
+// ========================
+//  CARGA POR GÉNERO
+// ========================
+
+// Carga por género y pinta en .category-grid (hasta limit)
+export async function loadCategoryByGenre(genre, limit = 70) {
+  const grid = document.querySelector(".category-grid");
+  const title = document.querySelector("#category-page .section-header h2");
+  if (title) title.textContent = `Category: ${genre}`;
+  if (!grid) return;
+
+  grid.innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;color:#999;padding:1.5rem;">
+      Cargando "${genre}"…
+    </div>`;
+
+  try {
+    const url = `${CATEGORY_GENRE_BASE}/${encodeURIComponent(genre)}`;
+    const res = await fetch(url, { headers: { Accept: "application/json" } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const raw  = await res.json();
+    const list = (Array.isArray(raw) ? raw : []).map(mapCatalogItem);
+    const slice = list.slice(0, limit);
+
+    renderListToSelector(slice, ".category-grid");
+  } catch (err) {
+    console.error("[category] error:", err);
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;color:#e66;padding:1.5rem;">
+        No se pudo cargar la categoría "${genre}".
+      </div>`;
+  }
+}
+
+
+// Añade controles de selección de género si no existen
+
+function ensureCategoryControls() {
+  const header = document.querySelector("#category-page .section-header");
+  if (!header) return;
+
+  // Evita duplicar el select si ya existe
+  if (header.querySelector("#category-genre-select")) return;
+
+  const wrap = document.createElement("div");
+  wrap.style.marginLeft = "auto";
+  wrap.innerHTML = `
+    <label style="margin-right:8px;opacity:.8;"> Genre:</label>
+    <select id="category-genre-select" class="btn" style="min-width:180px;">
+      ${KNOWN_GENRES.map(g => `<option value="${g}">${g}</option>`).join("")}
+    </select>
+  `;
+  header.appendChild(wrap);
+
+  const select = header.querySelector("#category-genre-select");
+  select.addEventListener("change", (e) => {
+    const genre = e.target.value;
+    loadCategoryByGenre(genre, 70);
+  });
+}
+
+
+
+// Carga inicial al abrir Category
+// (si la navegación no recarga la página, llama a loadCategoryByGenre desde el manejador de rutas)
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Cuando se navegue a Category, prepara el select y carga un género por defecto
+  const categoryPage = document.getElementById("category-page");
+  if (!categoryPage) return;
+
+  ensureCategoryControls();
+
+  // Género por defecto (cámbialo si prefieres otro)
+  const defaultGenre = KNOWN_GENRES[0] || "Acción";
+  const select = document.getElementById("category-genre-select");
+  if (select) select.value = defaultGenre;
+
+  // Carga inicial
+  loadCategoryByGenre(defaultGenre, 70);
 });
 
+// Si tu navegación cambia las páginas con clases, puedes enganchar aquí:
+window.showCategory = (genre = KNOWN_GENRES[0] || "Acción") => {
+  document.querySelectorAll(".page-content").forEach(p => p.classList.remove("active"));
+  document.getElementById("category-page")?.classList.add("active");
+  ensureCategoryControls();
+  const select = document.getElementById("category-genre-select");
+  if (select) select.value = genre;
+  loadCategoryByGenre(genre, 70);
+};
 
 
 
 
 
-
-// --- Llamada inicial ---
-document.addEventListener("DOMContentLoaded", getMovies);
 
 // Dispara Popular content sin tocar tu getMovies()
 document.addEventListener("DOMContentLoaded", () => {
+  
+  loadRankingGlobalFromBackend({ limit: 10, containerSelector: ".movie-container" });
+
   loadPopularContent(20); // puedes cambiar el límite si quieres
+
+
+  if (document.querySelector(".movies-grid")) loadMoviesGrid(100);
+  if (document.querySelector(".series-grid")) loadSeriesGrid(100);
+  if (document.querySelector(".anime-grid")) loadAnimeGrid(100);
 });
