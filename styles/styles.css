@@ -1414,7 +1414,7 @@ h6 {
   scrollbar-width: thin;
   /* scrollbar más delgado en Firefox */
   scrollbar-color: #666 #333;
-   
+
 }
 
 .movie-container {
@@ -1501,6 +1501,69 @@ h6 {
   font-size: 12px;
 }
 
+#kf-search-panel {
+  position: absolute;
+  display: none;
+  background: #111;
+  border: 1px solid #2b2b2b;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .45);
+  max-height: 60vh;
+  overflow-y: auto;
+  z-index: 2000;
+}
+
+#kf-search-panel.open {
+  display: block;
+}
+
+.kf-search-empty,
+.kf-search-error {
+  color: #bbb;
+  padding: 14px;
+  font-size: 14px;
+}
+
+.kf-search-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #1e1e1e;
+}
+
+.kf-search-row:last-child {
+  border-bottom: none;
+}
+
+.kf-search-row:hover {
+  background: #1a1a1a;
+}
+
+.kf-search-poster {
+  width: 42px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.kf-search-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.kf-search-title {
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.kf-search-sub {
+  color: #aaa;
+  font-size: 12px;
+}
 
 
 
